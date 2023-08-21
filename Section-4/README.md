@@ -23,7 +23,7 @@ strings -a /home/opc/mysql-sandboxes/3307/sandboxdata/world_x/countryinfo.ibd
 ```
 Encrypt table using TDE
 ```
-mysql -uroot -h::1 -e "alter table world_x.countryinfo encryption='Y'"
+mysql -uroot -h::1 -P3307 -e "alter table world_x.countryinfo encryption='Y'"
 ```
 Gather table data from OS
 ```
