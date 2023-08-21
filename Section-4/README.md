@@ -1,5 +1,6 @@
 # MySQL Enterprise Security
 ## Transparent Data Encryption (TDE)
+![Image of picture1](https://github.com/tripplea-sg/test-drive-aug-2023/blob/main/Images/Screenshot%202023-08-22%20at%206.24.23%20AM.png)
 Install plugin 
 ```
 vi /home/opc/mysql-sandboxes/3307/my.cnf
