@@ -148,7 +148,7 @@ select * from city where id=1;
 ### 1. Install Enterprise Encryption
 As root:
 ```
-mysql -uroot -proot -h127.0.0.1 -P3307 --skip-binary-as-hex
+mysql -uroot -h127.0.0.1 -P3307 --skip-binary-as-hex
 
 CREATE FUNCTION asymmetric_decrypt RETURNS STRING SONAME 'openssl_udf.so';
 CREATE FUNCTION asymmetric_derive RETURNS STRING SONAME 'openssl_udf.so';
