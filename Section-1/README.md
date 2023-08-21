@@ -20,6 +20,19 @@ Clean up
 ```
 rm $HOME/*.rpm
 ```
+## Know your server
+Find OS version
+```
+cat /etc/os-release
+```
+CPU size
+```
+lscpu
+```
+RAM size
+```
+cat /proc/meminfo | grep MemTotal
+```
 ## OS Parameter Tuning
 Edit /etc/fstab using "sudo vi /etc/fstab" and change 
 ```
