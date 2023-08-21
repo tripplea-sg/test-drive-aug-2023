@@ -93,12 +93,12 @@ show global status like '%firewall%';
 		Firewall_access_suspicious: The number of statements logged
 		Firewall_cached_entries: The number of statements recorded, including duplicates. 
 ```
-## 2. Set important privileges
+### 2. Set important privileges
 ```
 grant FIREWALL_EXEMPT on *.* to root@'localhost';
 grant FIREWALL_ADMIN on *.* to root@'localhost';
 ```
-## 3. Train Firewall
+### 3. Train Firewall
 As root:
 ```
 create user demo@'%' identified by 'demo';
@@ -127,7 +127,7 @@ SELECT MODE FROM performance_schema.firewall_groups WHERE NAME = 'group1';
 SELECT * FROM performance_schema.firewall_membership WHERE GROUP_ID = 'group1' ORDER BY MEMBER_ID;
 SELECT RULE FROM performance_schema.firewall_group_allowlist WHERE NAME = 'group1';
 ```
-## 4. Testing the Firewall
+### 4. Testing the Firewall
 AS ROOT, turn on protecting mode
 ```
 call mysql.sp_set_firewall_group_mode('group1','PROTECTING');
@@ -144,6 +144,55 @@ show tables;
 select * from city;
 select * from city where id=1;
 ```
+## Encryption and Data Masking
+### 1. Install Enterprise Encryption
+As root:
+```
+mysql -uroot -proot -h127.0.0.1 -P3307 --skip-binary-as-hex
 
+CREATE FUNCTION asymmetric_decrypt RETURNS STRING SONAME 'openssl_udf.so';
+CREATE FUNCTION asymmetric_derive RETURNS STRING SONAME 'openssl_udf.so';
+CREATE FUNCTION asymmetric_encrypt RETURNS STRING SONAME 'openssl_udf.so';
+CREATE FUNCTION asymmetric_sign RETURNS STRING SONAME 'openssl_udf.so';
+CREATE FUNCTION asymmetric_verify RETURNS INTEGER SONAME 'openssl_udf.so';
+CREATE FUNCTION create_asymmetric_priv_key RETURNS STRING SONAME 'openssl_udf.so';
+CREATE FUNCTION create_asymmetric_pub_key RETURNS STRING SONAME 'openssl_udf.so';
+CREATE FUNCTION create_dh_parameters RETURNS STRING SONAME 'openssl_udf.so';
+CREATE FUNCTION create_digest RETURNS STRING SONAME 'openssl_udf.so';
+
+```
+### 2. Encrypt table
+```
+select keyring_key_fetch('MyKey');
+
+create table world_x.city_info_encrypted as select id, name, countrycode, district, hex(aes_encrypt(info, hex(keyring_key_fetch('MyKey')))) info from world_x.city;
+
+select * from world_x.city_info_encrypted;
+
+select id, name, countrycode, district, aes_decrypt(unhex(info), hex(keyring_key_fetch('MyKey'))) from world_x.city_info_encrypted
+```
+### 3. Install Data Masking
+```
+INSTALL PLUGIN data_masking SONAME 'data_masking.so';
+CREATE FUNCTION gen_blacklist RETURNS STRING SONAME 'data_masking.so';
+CREATE FUNCTION gen_dictionary RETURNS STRING SONAME 'data_masking.so';
+CREATE FUNCTION gen_dictionary_drop RETURNS STRING SONAME 'data_masking.so';
+CREATE FUNCTION gen_dictionary_load RETURNS STRING SONAME 'data_masking.so';
+CREATE FUNCTION gen_range RETURNS INTEGER SONAME 'data_masking.so';
+CREATE FUNCTION gen_rnd_email RETURNS STRING SONAME 'data_masking.so';
+CREATE FUNCTION gen_rnd_pan RETURNS STRING SONAME 'data_masking.so';
+CREATE FUNCTION gen_rnd_ssn RETURNS STRING SONAME 'data_masking.so';
+CREATE FUNCTION gen_rnd_us_phone RETURNS STRING SONAME 'data_masking.so';
+CREATE FUNCTION mask_inner RETURNS STRING SONAME 'data_masking.so';
+CREATE FUNCTION mask_outer RETURNS STRING SONAME 'data_masking.so';
+CREATE FUNCTION mask_pan RETURNS STRING SONAME 'data_masking.so';
+CREATE FUNCTION mask_pan_relaxed RETURNS STRING SONAME 'data_masking.so';
+CREATE FUNCTION mask_ssn RETURNS STRING SONAME 'data_masking.so';
+```
+### 4. Use Data Masking
+```
+select mask_outer(name, 1,1), countrycode from world_x.city;
+select mask_inner(name, 1,1), countrycode from world_x.city;
+```
 
 
