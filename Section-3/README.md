@@ -55,14 +55,16 @@ Finalizing restoration
 ```
 mv /home/opc/mysql-sandboxes/3307/sandboxdata/backup-mysqld-auto.cnf /home/opc/mysql-sandboxes/3307/sandboxdata/mysqld-auto.cnf
 ```
-Stop database instance 3306
+Stop and delete database instance 3306
 ```
 mysqlsh -e "dba.stopSandboxInstance(3306)"
+
+rm -Rf mysql-sandboxes/3306/sandboxdata/*
 ```
 Start database instance 3307
 ```
 mysqlsh -e "dba.startSandboxInstance(3307)"
 
 ## check variable values and latest data
-mysql -uroot -h::1 -P3307 -e "show variables like '%invisible%'; select * from test.test"
+mysql -uroot -h::1 -P3307 -e "show variables like '%invisible%'; show variables like '%buffer_pool%'; show variables like '%redo_log%'; select * from test.test"
 ```
