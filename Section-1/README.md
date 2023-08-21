@@ -33,6 +33,26 @@ RAM size
 ```
 cat /proc/meminfo | grep MemTotal
 ```
+## Create your 1st database 
+Create Sandbox Instance 3306
+```
+sudo systemctl stop mysqld
+sudo systemctl disable mysqld
+mysqlsh -e "dba.deploySandboxInstance(3306)"
+
+## press enter for empty root password
+
+```
+Download and install world_x schema/data
+```
+wget http://downloads.mysql.com/docs/world_x-db.zip
+
+unzip world_x-db.zip
+
+mysql -uroot -h::1 < world_x-db/world_x.sql
+
+mysql -uroot -h::1 -e "show databases"
+```
 ## OS Parameter Tuning
 Edit /etc/fstab using "sudo vi /etc/fstab" and change 
 ```
@@ -74,15 +94,6 @@ exit
 cat /sys/block/sda/queue/scheduler
 ```
 ## Setup and Configure Instance 3306
-Create Sandbox Instance 3306
-```
-sudo systemctl stop mysqld
-sudo systemctl disable mysqld
-mysqlsh -e "dba.deploySandboxInstance(3306)"
-
-## press enter for empty root password
-
-```
 Configure MySQL Instance 3306
 ```
 mysql -uroot -h::1
@@ -108,13 +119,4 @@ restart;
 
 exit;
 ```
-Download and install world_x schema/data
-```
-wget http://downloads.mysql.com/docs/world_x-db.zip
 
-unzip world_x-db.zip
-
-mysql -uroot -h::1 < world_x-db/world_x.sql
-
-mysql -uroot -h::1 -e "show databases"
-```
