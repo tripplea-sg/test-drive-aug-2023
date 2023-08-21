@@ -163,13 +163,11 @@ CREATE FUNCTION create_digest RETURNS STRING SONAME 'openssl_udf.so';
 ```
 ### 2. Encrypt table
 ```
-select keyring_key_fetch('MyKey');
-
-create table world_x.city_info_encrypted as select id, name, countrycode, district, hex(aes_encrypt(info, hex(keyring_key_fetch('MyKey')))) info from world_x.city;
+create table world_x.city_info_encrypted as select id, name, countrycode, district, hex(aes_encrypt(info, hex('passphrase'))) info from world_x.city;
 
 select * from world_x.city_info_encrypted;
 
-select id, name, countrycode, district, aes_decrypt(unhex(info), hex(keyring_key_fetch('MyKey'))) from world_x.city_info_encrypted
+select id, name, countrycode, district, aes_decrypt(unhex(info), hex('passphrase')) from world_x.city_info_encrypted;
 ```
 ### 3. Install Data Masking
 ```
