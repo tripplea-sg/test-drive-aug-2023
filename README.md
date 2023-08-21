@@ -4,4 +4,3 @@ Section-2  Document Store </br>
 Section-3  MySQL Enterprise Backup </br>
 Section-4  MySQL Enterprise Security </br>
 Section-5  MySQL High Availability </br>
-Section-6  MySQL HeatWave </br>
