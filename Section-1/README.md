@@ -53,6 +53,10 @@ mysql -uroot -h::1 < world_x-db/world_x.sql
 
 mysql -uroot -h::1 -e "show databases"
 ```
+Baseline database performance
+```
+mysqlslap --user=root --host=127.0.0.1  --concurrency=100 --iterations=10 --auto-generate-sql --verbose
+```
 ## OS Parameter Tuning
 Edit /etc/fstab using "sudo vi /etc/fstab" and change 
 ```
