@@ -35,18 +35,9 @@ Select data from MySQL
 mysql -uroot -h::1 -P3307 -e "select * from world_x.countryinfo limit 1"
 ```
 ## MySQL Enterprise Audit
-Install plugin on 3307, 3308, 5506, 2206
+Install plugin 
 ```
-mysqlsh gradmin:grpass@localhost:3306 -- cluster setPrimaryInstance localhost:3306
-
-mysql -uroot -h::1 -P3307 -e "set global super_read_only=off; set sql_log_bin=0; INSTALL PLUGIN audit_log SONAME 'audit_log.so'; set sql_log_bin=1; set global super_read_only=on;"
-mysql -uroot -h::1 -P3308 -e "set global super_read_only=off; set sql_log_bin=0; INSTALL PLUGIN audit_log SONAME 'audit_log.so'; set sql_log_bin=1; set global super_read_only=on;"
-mysql -uroot -h::1 -P2206 -e "set global super_read_only=off; set sql_log_bin=0; INSTALL PLUGIN audit_log SONAME 'audit_log.so'; set sql_log_bin=1; set global super_read_only=on;"
-mysql -uroot -h::1 -P5506 -e "set global super_read_only=off; set sql_log_bin=0; INSTALL PLUGIN audit_log SONAME 'audit_log.so'; set sql_log_bin=1; set global super_read_only=on;"
-```
-On 3306, run script to install Audit
-```
-mysql -uroot -D mysql -h::1 < /usr/share/mysql-8.1/audit_log_filter_linux_install.sql
+mysql -uroot -D mysql -h::1 -P3307 < /usr/share/mysql-8.1/audit_log_filter_linux_install.sql
 
 mysql -uroot -h::1 -P3307 -e "show plugins"
 ```
@@ -57,11 +48,13 @@ mysql -uroot -h::1 -P3307
 SELECT audit_log_filter_set_filter('log_all', '{ "filter": { "log": true } }');
 SELECT audit_log_filter_set_user('%', 'log_all');
 SELECT audit_log_filter_flush() AS 'Result';
+
+exit;
 ```
 ## MySQL Enterprise Firewall
 ### 1. Install Firewall
 ```
-mysql -uroot -h127.0.0.1 -P3307 < /home/opc/software/mysql-commercial-8.0.30-el7-x86_64/share/linux_install_firewall.sql 
+mysql -uroot -h127.0.0.1 -P3307 < /usr/share/mysql-8.1/linux_install_firewall.sql 
 
 mysql -uroot -h127.0.0.1 -P3307
 
