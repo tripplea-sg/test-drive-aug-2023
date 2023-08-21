@@ -1,5 +1,5 @@
 # Document Store
-![Image of picture1](https://github.com/tripplea-sg/test-drive-aug-2023/blob/main/Images/Document%20Store.png)
+![Image of picture1]([https://github.com/tripplea-sg/test-drive-aug-2023/blob/main/Images/Document%20Store.png](https://github.com/tripplea-sg/test-drive-aug-2023/blob/main/Images/Screenshot%202023-08-22%20at%206.01.40%20AM.png)
 
 ## Demo from MySQL Shell
 Using CRUD
