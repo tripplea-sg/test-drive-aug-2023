@@ -191,6 +191,16 @@ CREATE FUNCTION mask_ssn RETURNS STRING SONAME 'data_masking.so';
 ```
 select mask_outer(name, 1,1), countrycode from world_x.city;
 select mask_inner(name, 1,1), countrycode from world_x.city;
+
+exit;
+```
+## Clean Up
+```
+mysqlsh -e "dba.stopSandboxInstance(3307)"
+mysqlsh -e "dba.deleteSandboxInstance(3307)"
+
+rm -Rf /home/opc/mysql-sandboxes
+
 ```
 
 
