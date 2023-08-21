@@ -46,23 +46,17 @@ mysql -uroot -h::1 -P5506 -e "set global super_read_only=off; set sql_log_bin=0;
 ```
 On 3306, run script to install Audit
 ```
-mysql -uroot -h::1 -e "create database mysql_audit"
+mysql -uroot -D mysql -h::1 < /usr/share/mysql-8.1/audit_log_filter_linux_install.sql
 
-mysql -uroot -D mysql_audit -h::1 < /usr/share/mysql-8.1/audit_log_filter_linux_install.sql
-
-mysql -uroot -h::1 -e "show plugins"
+mysql -uroot -h::1 -P3307 -e "show plugins"
 ```
 Create audit log filter and assign to all
 ```
-mysql -uroot -h::1 -e "SELECT audit_log_filter_set_filter('log_all', '{ "filter": { "log": true } }');"
-mysql -uroot -h::1 -e "SELECT audit_log_filter_set_user('%', 'log_all');"
-```
-Flush
-```
-mysql -uroot -h::1 -P3307 -e "SELECT audit_log_filter_flush() AS 'Result';"
-mysql -uroot -h::1 -P3308 -e "SELECT audit_log_filter_flush() AS 'Result';"
-mysql -uroot -h::1 -P2206 -e "SELECT audit_log_filter_flush() AS 'Result';"
-mysql -uroot -h::1 -P5506 -e "SELECT audit_log_filter_flush() AS 'Result';"
+mysql -uroot -h::1 -P3307
+
+SELECT audit_log_filter_set_filter('log_all', '{ "filter": { "log": true } }');
+SELECT audit_log_filter_set_user('%', 'log_all');
+SELECT audit_log_filter_flush() AS 'Result';
 ```
 
 
