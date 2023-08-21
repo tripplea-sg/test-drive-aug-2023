@@ -93,19 +93,29 @@ echo none > /sys/block/sda/queue/scheduler
 exit
 cat /sys/block/sda/queue/scheduler
 ```
+Start database
+```
+mysqlsh -e "dba.startSandboxInstance(3306)"
+```
+Baseline database performance
+```
+mysqlslap --user=root --host=127.0.0.1  --concurrency=100 --iterations=10 --auto-generate-sql --verbose
+```
 ## Setup and Configure Instance 3306
 Configure MySQL Instance 3306
 ```
 mysql -uroot -h::1
 
-set persist_only innodb_redo_log_capacity=2147483648;
+SELECT ( @@read_buffer_size + @@read_rnd_buffer_size + @@sort_buffer_size + @@join_buffer_size + @@binlog_cache_size + @@thread_stack + @@tmp_table_size + 2*@@net_buffer_length ) / (1024 * 1024) AS MEMORY_PER_CON_MB;
+
+set persist_only innodb_redo_log_capacity=19241453486;
 set persist_only innodb_flush_neighbors=2;
-set persist_only innodb_io_capacity=3000;
-set persist_only innodb_io_capacity_max=3000;
-set persist_only innodb_buffer_pool_size=25769803776;
-set persist_only innodb_buffer_pool_instances=12;
+set persist_only innodb_io_capacity=6000;
+set persist_only innodb_io_capacity_max=6000;
+set persist_only innodb_buffer_pool_size=51539607552;
+set persist_only innodb_buffer_pool_instances=24;
 set persist_only innodb_lru_scan_depth=250;
-set persist_only innodb_page_cleaners=12;
+set persist_only innodb_page_cleaners=24;
 set persist_only innodb_checksum_algorithm=strict_crc32;
 set persist_only binlog_row_image=MINIMAL;
 
@@ -118,5 +128,9 @@ set persist_only sql_generate_invisible_primary_key=on;
 restart;
 
 exit;
+```
+Baseline database performance
+```
+mysqlslap --user=root --host=127.0.0.1  --concurrency=100 --iterations=10 --auto-generate-sql --verbose
 ```
 
