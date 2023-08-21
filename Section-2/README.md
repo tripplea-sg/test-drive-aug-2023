@@ -1,4 +1,6 @@
 # Document Store
+![Image of picture1](https://github.com/tripplea-sg/test-drive-aug-2023/blob/main/Images/Document%20Store.png)
+
 ## Demo from MySQL Shell
 Using CRUD
 ```
