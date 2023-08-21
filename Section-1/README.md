@@ -56,6 +56,8 @@ mysql -uroot -h::1 -e "show databases"
 Baseline database performance
 ```
 mysqlslap --user=root --host=127.0.0.1  --concurrency=100 --iterations=10 --auto-generate-sql --verbose
+
+mysqlslap --user=root --host=127.0.0.1  --concurrency=100 --iterations=10 --create-schema=world_x --query="SELECT * FROM world_x.countryinfo;" --verbose
 ```
 ## OS Parameter Tuning
 Edit /etc/fstab using "sudo vi /etc/fstab" and change 
@@ -100,6 +102,8 @@ mysqlsh -e "dba.startSandboxInstance(3306)"
 Baseline database performance
 ```
 mysqlslap --user=root --host=127.0.0.1  --concurrency=100 --iterations=10 --auto-generate-sql --verbose
+
+mysqlslap --user=root --host=127.0.0.1  --concurrency=100 --iterations=10 --create-schema=world_x --query="SELECT * FROM world_x.countryinfo;" --verbose
 ```
 ## Setup and Configure Instance 3306
 Configure MySQL Instance 3306
@@ -132,5 +136,7 @@ exit;
 Baseline database performance
 ```
 mysqlslap --user=root --host=127.0.0.1  --concurrency=100 --iterations=10 --auto-generate-sql --verbose
+
+mysqlslap --user=root --host=127.0.0.1  --concurrency=100 --iterations=10 --create-schema=world_x --query="SELECT * FROM world_x.countryinfo;" --verbose
 ```
 
