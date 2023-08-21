@@ -66,10 +66,6 @@ to
 ```
 /dev/mapper/ocivolume-root /                       xfs     defaults,nodiratime,noatime      0 0
 ```
-Reboot the VM.
-```
-sudo reboot
-```
 Check vm.swappiness
 ```
 cat /proc/sys/vm/swappiness
