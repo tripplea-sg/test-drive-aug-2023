@@ -49,7 +49,7 @@ Add instances
 ```
 mysqlsh gradmin:grpass@localhost:3306 -- cluster add-instance gradmin:grpass@localhost:3307 --recoveryMethod=incremental
 
-mysqlsh gradmin:grpass@localhost:3306 -- cluster add-instance gradmin:grpass@localhost:3307 --recoveryMethod=clone
+mysqlsh gradmin:grpass@localhost:3306 -- cluster add-instance gradmin:grpass@localhost:3308 --recoveryMethod=clone
 
 mysqlsh gradmin:grpass@localhost:3306 -- cluster status
 ```
@@ -148,7 +148,7 @@ rm -Rf router
 ```
 Configure MySQL Router
 ```
-mysqlrouter --bootstrap gradmin:grpass@localhost:3306 --directory router
+mysqlrouter --bootstrap gradmin:grpass@localhost:3306 --directory router --force
 ```
 Start MySQL Router
 ```
