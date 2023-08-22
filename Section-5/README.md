@@ -140,4 +140,62 @@ mysqlsh gradmin:grpass@localhost:5506 -- dba rebootClusterFromCompleteOutage
 
 mysqlsh gradmin:grpass@localhost:5506 -- cluster status
 ```
+Stop MySQL Router
+```
+router/stop.sh
 
+rm -Rf router
+```
+Configure MySQL Router
+```
+mysqlrouter --bootstrap gradmin:grpass@localhost:3306 --directory router
+```
+Start MySQL Router
+```
+router/start.sh
+```
+## InnoDB Cluster Read Replica
+Create instance 2206
+```
+mysqlsh -e "dba.deploySandboxInstance(2206)"
+```
+Configure instance
+```
+mysqlsh -- dba configure-instance { --host=127.0.0.1 --port=2206 --user=root } --clusterAdmin=gradmin --clusterAdminPassword='grpass' --interactive=false --restart=true
+```
+Adding node as read replica
+```
+mysqlsh gradmin:grpass@localhost:3306 -- cluster addReplicaInstance gradmin:grpass@localhost:2206 --recoveryMethod=clone
+```
+Check cluster status
+```
+mysqlsh gradmin:grpass@localhost:3306 -- cluster status
+```
+Change replication sources from PRIMARY to SECONDARY
+```
+mysqlsh gradmin:grpass@localhost:3306 --cluster -e "cluster.setInstanceOption('localhost:2206','replicationSources','secondary')"
+
+mysqlsh gradmin:grpass@localhost:3306 -- cluster rejoinInstance localhost:2206
+```
+Check cluster status
+```
+mysqlsh gradmin:grpass@localhost:3306 -- cluster status
+```
+Connecting to PRIMARY through MySQL Router
+```
+mysql -ugradmin -pgrpass -h127.0.0.1 -P6446 -e "select @@port"
+```
+Connecting to SECONDARY through MySQL Router
+```
+mysql -ugradmin -pgrpass -h127.0.0.1 -P6447 -e "select @@port"
+
+mysql -ugradmin -pgrpass -h127.0.0.1 -P6447 -e "select @@port"
+```
+Change MySQL Router default R/O to Read Replica
+```
+mysqlsh gradmin:grpass@localhost:3306 --cluster -e "cluster.getClusterSet().setRoutingOption('read_only_targets','read_replicas')"
+```
+Now, test connection to MySQL Router port 6447
+```
+mysql -ugradmin -pgrpass -h127.0.0.1 -P6447 -e "select @@port"
+```
