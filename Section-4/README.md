@@ -17,9 +17,10 @@ Restart
 ```
 mysql -uroot -h::1 -P3307 -e "restart"
 ```
-Check current keyring installation status
+Update keyring Hashicorp
 ```
-mysql -uroot -h::1 -P3307 -e "show plugins" | grep keyring_encrypted_file
+mysql -uroot -h::1 -P3307 --skip-binary-as-hex -e "SELECT keyring_hashicorp_update_config();"
+mysql -uroot -h::1 -P3307 -e "show variables like '%keyring%'";
 ```
 Gather table data from OS
 ```
