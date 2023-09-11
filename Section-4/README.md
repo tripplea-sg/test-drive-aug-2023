@@ -1,14 +1,17 @@
 # MySQL Enterprise Security
-## Transparent Data Encryption (TDE)
+## Transparent Data Encryption (TDE) using Hashicorp
 ![Image of picture1](https://github.com/tripplea-sg/test-drive-aug-2023/blob/main/Images/Screenshot%202023-08-22%20at%206.24.23%20AM.png)
 Install plugin 
 ```
 vi /home/opc/mysql-sandboxes/3307/my.cnf
 
 ## content
-early-plugin-load=keyring_encrypted_file.so
-keyring_encrypted_file_data=/home/opc/mysql-sandboxes/3307/sandboxdata/keyring-encrypted
-keyring_encrypted_file_password=password
+early-plugin-load=keyring_hashicorp.so
+keyring_hashicorp_server_url='https://10.0.0.96:8200'
+keyring_hashicorp_role_id='183343a0-5847-b601-0621-b5523ff7fd00'
+keyring_hashicorp_secret_id='2e748f90-b802-3953-f1ff-671b6394b3e4'
+keyring_hashicorp_store_path='/v1/kv/mysql'
+keyring_hashicorp_auth_path='/v1/auth/approle/login'
 ```
 Restart 
 ```
@@ -33,6 +36,10 @@ strings -a /home/opc/mysql-sandboxes/3307/sandboxdata/world_x/countryinfo.ibd
 Select data from MySQL
 ```
 mysql -uroot -h::1 -P3307 -e "select * from world_x.countryinfo limit 1"
+```
+Unencrypt table
+```
+mysql -uroot -h::1 -P3307 -e "alter table world_x.countryinfo encryption='Y'"
 ```
 ## MySQL Enterprise Audit
 Install plugin 
